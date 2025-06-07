@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Store Name and Age</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef;
+      padding: 40px;
+      text-align: center;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Store Name and Age in Firebase</h2>
+  <form id="dataForm">
+    <input type="text" id="name" placeholder="Enter Name" required><br>
+    <input type="number" id="age" placeholder="Enter Age" required><br>
+    <button type="submit">Submit</button>
+    <div class="status" id="status"></div>
+  </form>
+
+  <!-- Firebase JS SDKs with ES Module support -->
+  <script type="module">
+    // Import the functions you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-analytics.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCfw_jj9gYJeR6zF-Pj1pado4nI16YnCbE",
+      authDomain: "javascript-5a890.firebaseapp.com",
+      projectId: "javascript-5a890",
+      storageBucket: "javascript-5a890.firebasestorage.app",
+      messagingSenderId: "591945335330",
+      appId: "1:591945335330:web:11c3cca28a4e8d5b6ac07b",
+      measurementId: "G-3J166FR284"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+    // Form handling
+    document.getElementById("dataForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+
+      const usersRef = ref(database, 'users/');
+      const newUserRef = push(usersRef);
+
+      set(newUserRef, {
+        name: name,
+        age: age
+      })
+      .then(() => {
+        document.getElementById("status").textContent = "Data saved successfully!";
+        document.getElementById("dataForm").reset();
+      })
+      .catch((error) => {
+        document.getElementById("status").textContent = "Error: " + error.message;
+      });
+    });
+  </script>
+
+</body>
+</html>
